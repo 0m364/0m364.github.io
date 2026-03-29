@@ -191,3 +191,11 @@ footer a:hover {
         width: auto;
     }
 }
+
+.square-button {
+    background-color: #006aff; /* Square's approximate brand color */
+}
+
+.square-button:hover {
+    background-color: #005ce6;
+}
