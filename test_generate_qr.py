@@ -1,71 +1,109 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch, MagicMock
 import sys
 
-# Mocking qrcode before importing the module that uses it
-sys.modules['qrcode'] = MagicMock()
-import qrcode
-qrcode.constants = MagicMock()
-qrcode.constants.ERROR_CORRECT_L = 'L'
+# Mock qrcode before importing generate_qr
+mock_qrcode_module = MagicMock()
+sys.modules['qrcode'] = mock_qrcode_module
+sys.modules['qrcode.constants'] = mock_qrcode_module.constants
 
-from generate_qr import generate_url_qr, generate_vcard_qr
+import generate_qr
 
 class TestGenerateQR(unittest.TestCase):
 
-    @patch('generate_qr.qrcode.QRCode')
-    def test_generate_url_qr(self, mock_qrcode_class):
-        mock_qr = mock_qrcode_class.return_value
+    def setUp(self):
+        # Reset the mock before each test
+        mock_qrcode_module.reset_mock()
+        mock_qrcode_module.QRCode.return_value.reset_mock()
+
+    def test_generate_url_qr(self):
+        # Setup mock
+        mock_qrcode = mock_qrcode_module.QRCode
+        mock_instance = mock_qrcode.return_value
         mock_img = MagicMock()
-        mock_qr.make_image.return_value = mock_img
+        mock_instance.make_image.return_value = mock_img
 
+        # Call the function
         url = "https://example.com"
-        output = "test_url.png"
+        output = "test_url_qr.png"
+        generate_qr.generate_url_qr(url, output)
 
-        generate_url_qr(url, output)
-
-        mock_qrcode_class.assert_called_once_with(
+        # Assertions
+        mock_qrcode.assert_called_with(
             version=1,
-            error_correction='L',
+            error_correction=mock_qrcode_module.constants.ERROR_CORRECT_L,
             box_size=10,
             border=4,
         )
-        mock_qr.add_data.assert_called_once_with(url)
-        mock_qr.make.assert_called_once_with(fit=True)
-        mock_qr.make_image.assert_called_once_with(fill_color="black", back_color="white")
+        mock_instance.add_data.assert_called_once_with(url)
+        mock_instance.make.assert_called_once_with(fit=True)
+        mock_instance.make_image.assert_called_once_with(fill_color="black", back_color="white")
         mock_img.save.assert_called_once_with(output)
 
-    @patch('generate_qr.qrcode.QRCode')
-    def test_generate_vcard_qr(self, mock_qrcode_class):
-        mock_qr = mock_qrcode_class.return_value
+    def test_generate_vcard_qr(self):
+        # Setup mock
+        mock_qrcode = mock_qrcode_module.QRCode
+        mock_instance = mock_qrcode.return_value
         mock_img = MagicMock()
-        mock_qr.make_image.return_value = mock_img
+        mock_instance.make_image.return_value = mock_img
 
+        # Call the function
         name = "John Doe"
-        org = "Test Org"
-        title = "Dev"
+        org = "Example Corp"
+        title = "Engineer"
         email = "john@example.com"
         url = "https://example.com"
-        output = "test_vcard.png"
+        output = "test_vcard_qr.png"
 
-        generate_vcard_qr(name, org, title, email, url, output)
+        generate_qr.generate_vcard_qr(name, org, title, email, url, output)
 
-        mock_qrcode_class.assert_called_once_with(
+        # Assertions
+        mock_qrcode.assert_called_with(
             version=1,
-            error_correction='L',
+            error_correction=mock_qrcode_module.constants.ERROR_CORRECT_L,
             box_size=10,
             border=4,
         )
-        # Check that add_data was called with vcard format
-        args, kwargs = mock_qr.add_data.call_args
-        vcard_data = args[0]
-        self.assertIn("BEGIN:VCARD", vcard_data)
-        self.assertIn(f"FN:{name}", vcard_data)
-        self.assertIn(f"ORG:{org}", vcard_data)
-        self.assertIn("END:VCARD", vcard_data)
 
-        mock_qr.make.assert_called_once_with(fit=True)
-        mock_qr.make_image.assert_called_once_with(fill_color="black", back_color="white")
+        # Verify vCard format
+        expected_vcard = f"""BEGIN:VCARD
+VERSION:3.0
+N:{name};;;;
+FN:{name}
+ORG:{org}
+TITLE:{title}
+EMAIL;type=INTERNET;type=WORK;type=pref:{email}
+URL:{url}
+END:VCARD"""
+        mock_instance.add_data.assert_called_once_with(expected_vcard)
+        mock_instance.make.assert_called_once_with(fit=True)
+        mock_instance.make_image.assert_called_once_with(fill_color="black", back_color="white")
         mock_img.save.assert_called_once_with(output)
 
-if __name__ == '__main__':
+    @patch('generate_qr.generate_url_qr')
+    @patch('sys.argv', ['generate_qr.py', 'url', 'https://example.com', '-o', 'custom_output.png'])
+    def test_main_url_command(self, mock_generate_url_qr):
+        generate_qr.main()
+        mock_generate_url_qr.assert_called_once_with('https://example.com', 'custom_output.png')
+
+    @patch('generate_qr.generate_vcard_qr')
+    @patch('sys.argv', ['generate_qr.py', 'vcard', '--name', 'John Doe', '--org', 'Example Corp', '--title', 'Engineer', '--email', 'john@example.com', '--url', 'https://example.com', '-o', 'vcard_output.png'])
+    def test_main_vcard_command(self, mock_generate_vcard_qr):
+        generate_qr.main()
+        mock_generate_vcard_qr.assert_called_once_with(
+            'John Doe', 'Example Corp', 'Engineer', 'john@example.com', 'https://example.com', 'vcard_output.png'
+        )
+
+    @patch('generate_qr.generate_vcard_qr')
+    @patch('generate_qr.generate_url_qr')
+    @patch('sys.argv', ['generate_qr.py'])
+    def test_main_no_command_default_behavior(self, mock_generate_url_qr, mock_generate_vcard_qr):
+        generate_qr.main()
+        # Verify both examples are generated
+        mock_generate_url_qr.assert_called_once_with('https://example.com', 'example_url_qr.png')
+        mock_generate_vcard_qr.assert_called_once_with(
+            "John Doe", "Example Corp", "Software Engineer", "john@example.com", "https://example.com", "example_vcard_qr.png"
+        )
+
+if __name__ == "__main__":
     unittest.main()
