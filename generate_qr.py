@@ -2,19 +2,23 @@ import qrcode
 import argparse
 import sys
 
-def generate_url_qr(url, output_filename="website_qr.png"):
-    """Generates a QR code that redirects to a given URL."""
+def _generate_qr_image(data, output_filename, fill_color="black", back_color="white"):
+    """Internal helper to configure and generate a QR code image."""
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=10,
         border=4,
     )
-    qr.add_data(url)
+    qr.add_data(data)
     qr.make(fit=True)
 
-    img = qr.make_image(fill_color="black", back_color="white")
+    img = qr.make_image(fill_color=fill_color, back_color=back_color)
     img.save(output_filename)
+
+def generate_url_qr(url, output_filename="website_qr.png"):
+    """Generates a QR code that redirects to a given URL."""
+    _generate_qr_image(url, output_filename)
     print(f"Generated {output_filename} for URL: {url}")
 
 def generate_vcard_qr(name, organization, title, email, url, output_filename="vcard_qr.png"):
@@ -29,17 +33,7 @@ EMAIL;type=INTERNET;type=WORK;type=pref:{email}
 URL:{url}
 END:VCARD"""
 
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
-    qr.add_data(vcard_data)
-    qr.make(fit=True)
-
-    img = qr.make_image(fill_color="black", back_color="white")
-    img.save(output_filename)
+    _generate_qr_image(vcard_data, output_filename)
     print(f"Generated {output_filename} with vCard contact details.")
 
 def main():
