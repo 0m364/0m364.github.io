@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const timezone = geoData.timezone;
 
         // Fetch Weather from Open-Meteo
-        const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`);
         if (!weatherResponse.ok) throw new Error('Failed to fetch weather data');
         const weatherData = await weatherResponse.json();
 
@@ -25,11 +25,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             timeZone: timezone,
             hour: '2-digit',
             minute: '2-digit',
-            hour12: true
+            hour12: false
         };
         const localTime = new Intl.DateTimeFormat([], timeOptions).format(new Date());
 
-        container.innerHTML = `<span>📍 ${city}</span> | <span>🕒 ${localTime}</span> | <span>🌡️ ${temp}°C</span>`;
+        const utcOptions = {
+            timeZone: 'UTC',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        };
+        const utcTime = new Intl.DateTimeFormat([], utcOptions).format(new Date());
+
+        container.innerHTML = `<span>📍 ${city}</span> | <span>🕒 ${localTime} LCL / ${utcTime} UTC</span> | <span>🌡️ ${temp}°F</span>`;
 
     } catch (error) {
         console.error('Error fetching local info:', error);
