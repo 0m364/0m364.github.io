@@ -2,10 +2,10 @@
     --primary-color: #3498db;
     --secondary-color: #85c1e9;
     --accent-color: #e74c3c;
-    --text-color: #d3d3d3;
+    --text-color: #00ff00;
     --light-bg: #000000;
-    --card-bg: #111111;
-    --white: #ffffff;
+    --card-bg: #000000;
+    --white: #00ff00;
 }
 
 * {
@@ -28,7 +28,7 @@ body {
 }
 
 header {
-    background-color: #34495e;
+    background-color: #000000;
     color: var(--white);
     padding: 3rem 0;
     text-align: center;
@@ -82,7 +82,7 @@ main {
 }
 
 strong {
-    color: #34495e;
+    color: #00ff00;
     font-weight: 600;
 }
 
@@ -92,7 +92,7 @@ em {
 }
 
 footer {
-    background-color: #34495e;
+    background-color: #000000;
     color: var(--white);
     text-align: center;
     padding: 1.5rem 0;
@@ -171,7 +171,7 @@ footer a:hover {
 }
 
 .button:hover {
-    background-color: #34495e;
+    background-color: #000000;
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
