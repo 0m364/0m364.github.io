@@ -148,17 +148,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 output.innerHTML += `Password: ${'*'.repeat(val.length)}<br>`;
 
                 try {
-                    const encrypted = 'U2FsdGVkX1/hBV++BeqMbngTJUutPCH2DCHQQHernak=';
+                    const encryptedUrl = 'U2FsdGVkX1+bdRJbcPFy/5tD1hGoHOBkO8HnXSSNT/9xkwiQeQ5/HX99yDzOQGDRZRunRS+WnZDcI3GC9u/2qxtOfItKpxHhdoJuLDRz3d0=';
                     if (typeof CryptoJS !== 'undefined') {
-                        const bytes = CryptoJS.AES.decrypt(encrypted, val);
-                        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+                        const bytes = CryptoJS.AES.decrypt(encryptedUrl, val);
+                        const decryptedUrl = bytes.toString(CryptoJS.enc.Utf8);
 
-                        if (originalText === 'ACCESS_GRANTED') {
+                        if (decryptedUrl.startsWith('https://')) {
                             inputLine.style.display = 'none';
                             output.innerHTML += `<span style="color: #0f0;">Access Granted. Decrypting signal intelligence...</span><br>`;
 
                             try {
-                                const res = await fetch('https://api.counterapi.dev/v1/0m364/websdr_login_attempts/up');
+                                const res = await fetch(decryptedUrl);
                                 const data = await res.json();
                                 output.innerHTML += `<span style="color: #0f0;">Connection Established. Successful accesses: ${data.count}</span><br>`;
                             } catch (err) {
