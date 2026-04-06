@@ -80,6 +80,42 @@ END:VCARD"""
         mock_instance.make_image.assert_called_once_with(fill_color="black", back_color="white")
         mock_img.save.assert_called_once_with(output)
 
+
+    def test_generate_vcard_qr_sanitization(self):
+        # Setup mock
+        mock_qrcode = mock_qrcode_module.QRCode
+        mock_instance = mock_qrcode.return_value
+        mock_img = MagicMock()
+        mock_instance.make_image.return_value = mock_img
+
+        # Call the function with injected newlines
+        name = "John\nDoe"
+        org = "Example\r\nCorp"
+        title = "Engi\nneer"
+        email = "john\n@example.com"
+        url = "https://example.com\n/evil"
+        output = "test_vcard_qr_sanitized.png"
+
+        generate_qr.generate_vcard_qr(name, org, title, email, url, output)
+
+        # Verify vCard format does not contain newlines in fields
+        expected_name = "JohnDoe"
+        expected_org = "ExampleCorp"
+        expected_title = "Engineer"
+        expected_email = "john@example.com"
+        expected_url = "https://example.com/evil"
+
+        expected_vcard = f"""BEGIN:VCARD
+VERSION:3.0
+N:{expected_name};;;;
+FN:{expected_name}
+ORG:{expected_org}
+TITLE:{expected_title}
+EMAIL;type=INTERNET;type=WORK;type=pref:{expected_email}
+URL:{expected_url}
+END:VCARD"""
+        mock_instance.add_data.assert_called_once_with(expected_vcard)
+
     @patch('generate_qr.generate_url_qr')
     @patch('sys.argv', ['generate_qr.py', 'url', 'https://example.com', '-o', 'custom_output.png'])
     def test_main_url_command(self, mock_generate_url_qr):
