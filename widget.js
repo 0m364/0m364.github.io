@@ -2,22 +2,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     const container = document.getElementById('local-info');
     if (!container) return;
 
-    try {
-        // Fetch IP and Location
-        const geoResponse = await fetch('https://get.geojs.io/v1/ip/geo.json');
-        if (!geoResponse.ok) throw new Error('Failed to fetch geo data');
-        const geoData = await geoResponse.json();
+    const CACHE_KEY = 'om364_local_info_cache';
+    const CACHE_TTL = 30 * 60 * 1000; // 30 minutes in ms
 
-        const lat = geoData.latitude;
-        const lon = geoData.longitude;
+    try {
+        let geoData, weatherData;
+        const cached = localStorage.getItem(CACHE_KEY);
+        const now = Date.now();
+
+        if (cached) {
+            const { timestamp, geo, weather } = JSON.parse(cached);
+            if (now - timestamp < CACHE_TTL) {
+                geoData = geo;
+                weatherData = weather;
+            }
+        }
+
+        if (!geoData || !weatherData) {
+            // Fetch IP and Location
+            const geoResponse = await fetch('https://get.geojs.io/v1/ip/geo.json');
+            if (!geoResponse.ok) throw new Error('Failed to fetch geo data');
+            geoData = await geoResponse.json();
+
+            const lat = geoData.latitude;
+            const lon = geoData.longitude;
+
+            // Fetch Weather from Open-Meteo
+            const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`);
+            if (!weatherResponse.ok) throw new Error('Failed to fetch weather data');
+            weatherData = await weatherResponse.json();
+
+            // Store in cache
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+                timestamp: now,
+                geo: geoData,
+                weather: weatherData
+            }));
+        }
+
         const city = geoData.city;
         const timezone = geoData.timezone;
-
-        // Fetch Weather from Open-Meteo
-        const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`);
-        if (!weatherResponse.ok) throw new Error('Failed to fetch weather data');
-        const weatherData = await weatherResponse.json();
-
         const temp = weatherData.current_weather.temperature;
 
         // Compute Local Time based on the user's IP timezone
