@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function escapeHtml(unsafe) {
-        return unsafe
+        return String(unsafe)
              .replace(/&/g, "&amp;")
              .replace(/</g, "&lt;")
              .replace(/>/g, "&gt;")
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             try {
                                 const res = await fetch('https://api.counterapi.dev/v1/0m364/websdr_login_attempts/up');
                                 const data = await res.json();
-                                output.innerHTML += `<span style="color: #0f0;">Connection Established. Successful accesses: ${data.count}</span><br>`;
+                                output.innerHTML += `<span style="color: #0f0;">Connection Established. Successful accesses: ${escapeHtml(data.count)}</span><br>`;
                             } catch (err) {
                                 output.innerHTML += `<span style="color: #0f0;">Connection Established. Counter unavailable.</span><br>`;
                             }
