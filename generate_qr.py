@@ -1,6 +1,5 @@
 import qrcode
 import argparse
-import sys
 import os
 
 def _generate_qr_image(data, output_filename, fill_color="black", back_color="white"):
