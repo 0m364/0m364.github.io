@@ -61,7 +61,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         const utcTime = new Intl.DateTimeFormat([], utcOptions).format(new Date());
 
-        container.innerHTML = `<span>📍 ${city}</span> | <span>🕒 ${localTime} LCL / ${utcTime} UTC</span> | <span>🌡️ ${temp}°F</span>`;
+        container.innerHTML = ''; // Clear existing content
+
+        const locSpan = document.createElement('span');
+        locSpan.textContent = `📍 ${city}`;
+
+        const timeSpan = document.createElement('span');
+        timeSpan.textContent = `🕒 ${localTime} LCL / ${utcTime} UTC`;
+
+        const tempSpan = document.createElement('span');
+        tempSpan.textContent = `🌡️ ${temp}°F`;
+
+        container.appendChild(locSpan);
+        container.appendChild(document.createTextNode(' | '));
+        container.appendChild(timeSpan);
+        container.appendChild(document.createTextNode(' | '));
+        container.appendChild(tempSpan);
 
     } catch (error) {
         console.error('Error fetching local info:', error);
