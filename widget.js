@@ -61,7 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         const utcTime = new Intl.DateTimeFormat([], utcOptions).format(new Date());
 
-        container.innerHTML = `<span>📍 ${city}</span> | <span>🕒 ${localTime} LCL / ${utcTime} UTC</span> | <span>🌡️ ${temp}°F</span>`;
+        const escapeHtmlWidget = (unsafe) => String(unsafe).replace(/[&<"'>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m] || m);
+        container.innerHTML = `<span>📍 ${escapeHtmlWidget(city)}</span> | <span>🕒 ${escapeHtmlWidget(localTime)} LCL / ${escapeHtmlWidget(utcTime)} UTC</span> | <span>🌡️ ${escapeHtmlWidget(temp)}°F</span>`;
 
     } catch (error) {
         console.error('Error fetching local info:', error);
