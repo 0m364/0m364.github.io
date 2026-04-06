@@ -2,10 +2,10 @@
     --primary-color: #3498db;
     --secondary-color: #85c1e9;
     --accent-color: #e74c3c;
-    --text-color: #00ff00;
+    --text-color: #d3d3d3;
     --light-bg: #000000;
     --card-bg: #000000;
-    --white: #00ff00;
+    --white: #d3d3d3;
 }
 
 * {
