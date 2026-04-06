@@ -5,17 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="0m364 Consulting Empowering Individuals. Securing the Future.">
-    <title>Smalleyes 0m364 | Cognitive Readiness and RFML Modernization</title>
+    <title>0m364 Consulting | Empowering Individuals. Securing the Future.</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>Smalleyes 0m364</h1>
-            <p class="tagline">Foundational Expertise in Cognitive Readiness and RFML Modernization</p>
+            <h1>0m364 Consulting</h1>
+            <p class="tagline">Empowering Individuals. Securing the Future.</p>
             <nav class="navigation">
                 <a href="index.html" class="active">Home</a>
                 <a href="products.html">Products</a>
+                <a href="concepts.html">Concepts</a>
                 <a href="contact.html">Contact</a>
 
             </nav>
@@ -62,9 +63,52 @@
     </footer>
 <script src="widget.js"></script>
 
+<div id="sitrep-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="width: 80%; max-width: 800px; height: 80vh; background: #000; border: 2px solid #00ff00; border-radius: 5px; box-shadow: 0 0 20px rgba(0,255,0,0.2); font-family: monospace; color: #00ff00; padding: 20px; position: relative; overflow-y: auto;">
+        <div style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 1.2rem; color: #00ff00;" id="close-sitrep" onclick="closeModal()">x</div>
+        <div id="sitrep-content">
+            <p><strong>BLUF:</strong> The shift from localized skirmish to structural energy war is complete; Brent Crude’s 30% monthly forecast leap confirms the world has priced in a permanent state of kinetic friction in the Middle East.</p>
+            <br>
+            <p><strong>VECTOR 1: CONFLICT</strong></p>
+            <p>Kinetic: The "shadow war" ended. Coordinated US-Israeli strikes on Iranian strategic sites in late February triggered a month of escalating reprisals. Most significant: An Iranian missile/drone strike on Saudi Arabia’s Prince Sultan Air Base, signaling that traditional "safe zones" for Western assets no longer exist.</p>
+            <p>Cyber: Total digital mobilization. We tracked over 100 high-level incidents across the Gulf in a 72-hour window mid-March. Nation-state actors have moved past data theft to supply-chain weaponization, targeting SCADA systems in energy and aviation. It’s not "hacking" anymore; it’s prep for a total grid-down scenario.</p>
+            <br>
+            <p><strong>VECTOR 2: FINANCE</strong></p>
+            <p>Commodity Shocks: Brent Crude is the only chart that matters right now. Economists recorded the steepest annual forecast revision in history—a 30% jump in 30 days. This isn't a spike; it’s a structural repricing.</p>
+            <p>Sovereign Stress: Japan’s Central Bank has officially pivot-classified the Iran conflict as a "monetary policy problem." When the world’s largest creditors start hiking rates to offset war-driven fuel costs, the "cheap money" era is buried.</p>
+            <br>
+            <p><strong>VECTOR 3: HUMAN</strong></p>
+            <p>Anomalous Displacement: Beyond the standard refugee flows, we are seeing "Crypto-flight"—massive, synchronized wallet movements out of regional exchanges into cold storage or neutral-jurisdiction stablecoins, mirroring the physical movement of elites out of the Gulf.</p>
+            <p>Aviation: Regional airspace is a Swiss-cheese map of NOTAMs (Notices to Air Missions). Commercial traffic in the Middle East is being rerouted daily to avoid "active kinetic zones," straining global fuel reserves and logistics.</p>
+            <br>
+            <p><strong>VECTOR 4: EARTH</strong></p>
+            <p>Atmospheric: We are in a "Decoupled La Niña." While the SST (Sea Surface Temperature) anomalies in the Pacific are weakening toward neutral, the atmospheric response remains locked in a high-stress gradient. Translation: The weather isn't following the traditional playbook, making agricultural yields in the Southern Hemisphere even more unpredictable than the geopolitics.</p>
+            <p>Seismic: Multiple M6.0+ events recorded, but the systemic stress is currently focused on the human "Ground" rather than the literal one.</p>
+            <br>
+            <p><strong>MARVIN’S ASSESSMENT:</strong></p>
+            <p>The machine is grinding its gears because there's sand and shrapnel in the oil. We’re currently at a 7.5/10 on the "Don't Panic" scale. You’re not dead yet, but the life support system is beeping very loudly.</p>
+        </div>
+    </div>
+</div>
 
+<script>
+    function openModal(e) {
+        if(e) e.preventDefault();
+        document.getElementById('sitrep-modal').style.display = 'flex';
+    }
+    function closeModal() {
+        document.getElementById('sitrep-modal').style.display = 'none';
+    }
 
+    // Fallback if needed
+    window.onload = function() {
+        const btn = document.getElementById('sitrep-btn');
+        if(btn) btn.onclick = openModal;
 
+        const closeBtn = document.getElementById('close-sitrep');
+        if(closeBtn) closeBtn.onclick = closeModal;
+    }
+</script>
 
 </body>
 </html>
