@@ -1,6 +1,7 @@
 import qrcode
 import argparse
 import sys
+import os
 
 def _generate_qr_image(data, output_filename, fill_color="black", back_color="white"):
     """Internal helper to configure and generate a QR code image."""
@@ -14,7 +15,10 @@ def _generate_qr_image(data, output_filename, fill_color="black", back_color="wh
     qr.make(fit=True)
 
     img = qr.make_image(fill_color=fill_color, back_color=back_color)
-    img.save(output_filename)
+
+    # Securely handle output path to prevent traversal
+    safe_filename = os.path.basename(output_filename)
+    img.save(safe_filename)
 
 def generate_url_qr(url, output_filename="website_qr.png"):
     """Generates a QR code that redirects to a given URL."""
