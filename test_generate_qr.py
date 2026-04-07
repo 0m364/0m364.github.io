@@ -80,6 +80,7 @@ END:VCARD"""
         mock_instance.make_image.assert_called_once_with(fill_color="black", back_color="white")
         mock_img.save.assert_called_once_with(output)
 
+    def test_generate_vcard_qr_injection(self):
 
     def test_generate_vcard_qr_sanitization(self):
         # Setup mock
@@ -89,6 +90,29 @@ END:VCARD"""
         mock_instance.make_image.return_value = mock_img
 
         # Call the function with injected newlines
+        name = "John Doe\nROLE:Hacker"
+        org = "Example Corp\r\nTEL:555-5555"
+        title = "Engineer\rNOTE:Injected"
+        email = "john@example.com"
+        url = "https://example.com"
+        output = "test_vcard_qr_injection.png"
+
+        generate_qr.generate_vcard_qr(name, org, title, email, url, output)
+
+        # Expected sanitized inputs
+        safe_name = "John DoeROLE:Hacker"
+        safe_org = "Example CorpTEL:555-5555"
+        safe_title = "EngineerNOTE:Injected"
+
+        # Verify vCard format has no newlines within the fields
+        expected_vcard = f"""BEGIN:VCARD
+VERSION:3.0
+N:{safe_name};;;;
+FN:{safe_name}
+ORG:{safe_org}
+TITLE:{safe_title}
+EMAIL;type=INTERNET;type=WORK;type=pref:{email}
+URL:{url}
         name = "John\nDoe"
         org = "Example\r\nCorp"
         title = "Engi\nneer"
