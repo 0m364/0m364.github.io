@@ -61,7 +61,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         const utcTime = new Intl.DateTimeFormat([], utcOptions).format(new Date());
 
-        container.innerHTML = `<span>📍 ${city}</span> | <span>🕒 ${localTime} LCL / ${utcTime} UTC</span> | <span>🌡️ ${temp}°F</span>`;
+        container.innerHTML = ''; // Clear existing content
+
+        const locSpan = document.createElement('span');
+        locSpan.textContent = `📍 ${city}`;
+
+        const timeSpan = document.createElement('span');
+        timeSpan.textContent = `🕒 ${localTime} LCL / ${utcTime} UTC`;
+
+        const tempSpan = document.createElement('span');
+        tempSpan.textContent = `🌡️ ${temp}°F`;
+
+        container.appendChild(locSpan);
+        container.appendChild(document.createTextNode(' | '));
+        container.appendChild(timeSpan);
+        container.appendChild(document.createTextNode(' | '));
+        container.appendChild(tempSpan);
 
     } catch (error) {
         console.error('Error fetching local info:', error);
@@ -112,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function escapeHtml(unsafe) {
-        return unsafe
+        return String(unsafe)
              .replace(/&/g, "&amp;")
              .replace(/</g, "&lt;")
              .replace(/>/g, "&gt;")
@@ -160,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             try {
                                 const res = await fetch('https://api.counterapi.dev/v1/0m364/websdr_login_attempts/up');
                                 const data = await res.json();
-                                output.innerHTML += `<span style="color: #0f0;">Connection Established. Successful accesses: ${data.count}</span><br>`;
+                                output.innerHTML += `<span style="color: #0f0;">Connection Established. Successful accesses: ${escapeHtml(data.count)}</span><br>`;
                             } catch (err) {
                                 output.innerHTML += `<span style="color: #0f0;">Connection Established. Counter unavailable.</span><br>`;
                             }

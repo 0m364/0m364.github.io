@@ -1,6 +1,5 @@
 import qrcode
 import argparse
-import sys
 import os
 
 def _generate_qr_image(data, output_filename, fill_color="black", back_color="white"):
@@ -34,6 +33,11 @@ def generate_vcard_qr(name, organization, title, email, url, output_filename="vc
     email = email.replace('\n', '').replace('\r', '')
     url = url.replace('\n', '').replace('\r', '')
 
+    name = name.replace("\n", "").replace("\r", "")
+    organization = organization.replace("\n", "").replace("\r", "")
+    title = title.replace("\n", "").replace("\r", "")
+    email = email.replace("\n", "").replace("\r", "")
+    url = url.replace("\n", "").replace("\r", "")
     vcard_data = f"""BEGIN:VCARD
 VERSION:3.0
 N:{name};;;;

@@ -81,6 +81,8 @@ END:VCARD"""
         mock_img.save.assert_called_once_with(output)
 
     def test_generate_vcard_qr_injection(self):
+
+    def test_generate_vcard_qr_sanitization(self):
         # Setup mock
         mock_qrcode = mock_qrcode_module.QRCode
         mock_instance = mock_qrcode.return_value
@@ -111,6 +113,30 @@ ORG:{safe_org}
 TITLE:{safe_title}
 EMAIL;type=INTERNET;type=WORK;type=pref:{email}
 URL:{url}
+        name = "John\nDoe"
+        org = "Example\r\nCorp"
+        title = "Engi\nneer"
+        email = "john\n@example.com"
+        url = "https://example.com\n/evil"
+        output = "test_vcard_qr_sanitized.png"
+
+        generate_qr.generate_vcard_qr(name, org, title, email, url, output)
+
+        # Verify vCard format does not contain newlines in fields
+        expected_name = "JohnDoe"
+        expected_org = "ExampleCorp"
+        expected_title = "Engineer"
+        expected_email = "john@example.com"
+        expected_url = "https://example.com/evil"
+
+        expected_vcard = f"""BEGIN:VCARD
+VERSION:3.0
+N:{expected_name};;;;
+FN:{expected_name}
+ORG:{expected_org}
+TITLE:{expected_title}
+EMAIL;type=INTERNET;type=WORK;type=pref:{expected_email}
+URL:{expected_url}
 END:VCARD"""
         mock_instance.add_data.assert_called_once_with(expected_vcard)
 
