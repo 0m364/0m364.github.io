@@ -63,6 +63,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const escapeHtmlWidget = (unsafe) => String(unsafe).replace(/[&<"'>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m] || m);
         container.innerHTML = `<span>📍 ${escapeHtmlWidget(city)}</span> | <span>🕒 ${escapeHtmlWidget(localTime)} LCL / ${escapeHtmlWidget(utcTime)} UTC</span> | <span>🌡️ ${escapeHtmlWidget(temp)}°F</span>`;
+        container.innerHTML = ''; // Clear existing content
+
+        const locSpan = document.createElement('span');
+        locSpan.textContent = `📍 ${city}`;
+
+        const timeSpan = document.createElement('span');
+        timeSpan.textContent = `🕒 ${localTime} LCL / ${utcTime} UTC`;
+
+        const tempSpan = document.createElement('span');
+        tempSpan.textContent = `🌡️ ${temp}°F`;
+
+        container.appendChild(locSpan);
+        container.appendChild(document.createTextNode(' | '));
+        container.appendChild(timeSpan);
+        container.appendChild(document.createTextNode(' | '));
+        container.appendChild(tempSpan);
 
     } catch (error) {
         console.error('Error fetching local info:', error);
@@ -113,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function escapeHtml(unsafe) {
-        return unsafe
+        return String(unsafe)
              .replace(/&/g, "&amp;")
              .replace(/</g, "&lt;")
              .replace(/>/g, "&gt;")
@@ -149,19 +165,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 output.innerHTML += `Password: ${'*'.repeat(val.length)}<br>`;
 
                 try {
-                    const encrypted = 'U2FsdGVkX1/hBV++BeqMbngTJUutPCH2DCHQQHernak=';
+                    const encryptedUrl = 'U2FsdGVkX1+bdRJbcPFy/5tD1hGoHOBkO8HnXSSNT/9xkwiQeQ5/HX99yDzOQGDRZRunRS+WnZDcI3GC9u/2qxtOfItKpxHhdoJuLDRz3d0=';
                     if (typeof CryptoJS !== 'undefined') {
-                        const bytes = CryptoJS.AES.decrypt(encrypted, val);
-                        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+                        const bytes = CryptoJS.AES.decrypt(encryptedUrl, val);
+                        const decryptedUrl = bytes.toString(CryptoJS.enc.Utf8);
 
-                        if (originalText === 'ACCESS_GRANTED') {
+                        if (decryptedUrl.startsWith('https://')) {
                             inputLine.style.display = 'none';
                             output.innerHTML += `<span style="color: #0f0;">Access Granted. Decrypting signal intelligence...</span><br>`;
 
                             try {
-                                const res = await fetch('https://api.counterapi.dev/v1/0m364/websdr_login_attempts/up');
+                                const res = await fetch(decryptedUrl);
                                 const data = await res.json();
-                                output.innerHTML += `<span style="color: #0f0;">Connection Established. Successful accesses: ${data.count}</span><br>`;
+                                output.innerHTML += `<span style="color: #0f0;">Connection Established. Successful accesses: ${escapeHtml(data.count)}</span><br>`;
                             } catch (err) {
                                 output.innerHTML += `<span style="color: #0f0;">Connection Established. Counter unavailable.</span><br>`;
                             }

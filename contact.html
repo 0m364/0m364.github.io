@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://get.geojs.io https://api.open-meteo.com https://api.counterapi.dev; frame-src 'self' https://github.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self'; img-src 'self' data: https:; connect-src 'self' https://get.geojs.io https://api.open-meteo.com https://api.counterapi.dev; frame-src 'self' https://github.com;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Contact Smalleyes 0m364 for specialized, Referral-Only Consultation and R&D for the IC, DoD, and authorized Prime Contractors.">
@@ -29,11 +29,11 @@
             <h2>Get in Touch</h2>
             <p>For specialized, Referral-Only Consultation and R&amp;D, please reach out via email or explore our open-source research and models.</p>
 
-            <div class="qr-code-container" style="text-align: center; margin: 2rem 0;">
-                <img src="qr_code_cropped.png" alt="Square Payment QR Code" style="max-width: 250px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                <p style="margin-top: 10px; font-weight: bold; color: var(--secondary-color);">Scan to Fund Research</p>
-                <div style="margin-top: 15px;">
-                    <iframe src="https://github.com/sponsors/0m364/button" title="Sponsor 0m364" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+            <div class="qr-code-container contact-qr-container">
+                <img src="qr_code_cropped.png" alt="Square Payment QR Code" class="contact-qr-image">
+                <p class="contact-qr-text">Scan to Fund Research</p>
+                <div class="contact-sponsor-iframe">
+                    <iframe src="https://github.com/sponsors/0m364/button" title="Sponsor 0m364" height="32" width="114" ></iframe>
                 </div>
             </div>
 
@@ -48,13 +48,13 @@
                 </a>
 
 
-                <a href="#" id="sitrep-btn" onclick="openModal(event)" class="button">
+                <a href="#" id="sitrep-btn" class="button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                     OSINT
                 </a>
                 <a href="https://huggingface.co/smalleyes" target="_blank" rel="noopener noreferrer" class="button">
                     <!-- Simple Hugging Face Emoji/Icon Placeholder -->
-                    <span style="font-size: 1.2rem; margin-right: 8px;">🤗</span>
+                    <span class="sitrep-btn-icon">🤗</span>
                     Hugging Face
                 </a>
 
@@ -65,11 +65,11 @@
             </div>
         </section>
 
-        <section id="mission" class="card full-width" style="margin-top: 2rem;">
+        <section id="mission" class="card full-width mission-card">
             <h2>Mission Statement</h2>
             <p><strong>Smalleyes 0m364</strong>, an SME-led consultancy, operates at the critical nexus of <em>Technology</em> and <em>Recursive AI Architectures</em>. Our principal possesses a distinguished background in system analysis and automation. Leveraging decades of expertise, our methodologies drive the future of operational efficiency, establishing new benchmarks for <strong>Cognitive Readiness</strong> and operator-focused solutions in complex environments.</p>
         </section>
-        <div style="text-align: center; margin-top: 2rem;"><a href="http://www.websdr.org/" class="button" style="display: inline-block;" target="_blank" rel="noopener noreferrer">WebSDR Home</a></div>
+        <div class="websdr-home-link-container"><a href="http://www.websdr.org/" class="button websdr-home-link" target="_blank" rel="noopener noreferrer">WebSDR Home</a></div>
     </main>
 
     <footer>
@@ -77,6 +77,7 @@
             <p>Williams Consultation Group | Williamsburg, VA | <a href="mailto:smalleyes@0m364.com">smalleyes@0m364.com</a> | <a href="https://0m364.com" target="_blank" rel="noopener noreferrer">https://0m364.com</a></p>
         </div>
     </footer>
+<script src="modal.js"></script>
 <script src="widget.js"></script>
 
 
@@ -84,9 +85,9 @@
 
 
 
-<div id="sitrep-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
-    <div style="width: 80%; max-width: 800px; height: 80vh; background: #000; border: 2px solid #00ff00; border-radius: 5px; box-shadow: 0 0 20px rgba(0,255,0,0.2); font-family: monospace; color: #00ff00; padding: 20px; position: relative; overflow-y: auto;">
-        <div style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 1.2rem; color: #00ff00;" id="close-sitrep" onclick="closeModal()">x</div>
+<div id="sitrep-modal" class="sitrep-modal-overlay">
+    <div class="sitrep-modal-content">
+        <div class="sitrep-modal-close" id="close-sitrep">x</div>
         <div id="sitrep-content">
             <p><strong>BLUF:</strong> The shift from localized skirmish to structural energy war is complete; Brent Crude’s 30% monthly forecast leap confirms the world has priced in a permanent state of kinetic friction in the Middle East.</p>
             <br>
@@ -115,24 +116,8 @@
 
 
 
-<script>
-    function openModal(e) {
-        if(e) e.preventDefault();
-        document.getElementById('sitrep-modal').style.display = 'flex';
-    }
-    function closeModal() {
-        document.getElementById('sitrep-modal').style.display = 'none';
-    }
 
-    // Fallback if needed
-    window.onload = function() {
-        const btn = document.getElementById('sitrep-btn');
-        if(btn) btn.onclick = openModal;
 
-        const closeBtn = document.getElementById('close-sitrep');
-        if(closeBtn) closeBtn.onclick = closeModal;
-    }
-</script>
-
+<button id="websdr-btn" style="display: none;">WebSDR</button>
 </body>
 </html>
