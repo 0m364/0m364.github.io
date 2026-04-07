@@ -26,6 +26,18 @@ def generate_url_qr(url, output_filename="website_qr.png"):
 
 def generate_vcard_qr(name, organization, title, email, url, output_filename="vcard_qr.png"):
     """Generates a digital business card (vCard) QR code."""
+    # Sanitize inputs to prevent vCard injection
+    name = name.replace('\n', '').replace('\r', '')
+    organization = organization.replace('\n', '').replace('\r', '')
+    title = title.replace('\n', '').replace('\r', '')
+    email = email.replace('\n', '').replace('\r', '')
+    url = url.replace('\n', '').replace('\r', '')
+
+    name = name.replace("\n", "").replace("\r", "")
+    organization = organization.replace("\n", "").replace("\r", "")
+    title = title.replace("\n", "").replace("\r", "")
+    email = email.replace("\n", "").replace("\r", "")
+    url = url.replace("\n", "").replace("\r", "")
     vcard_data = f"""BEGIN:VCARD
 VERSION:3.0
 N:{name};;;;

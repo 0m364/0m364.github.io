@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://get.geojs.io https://api.open-meteo.com https://api.counterapi.dev; frame-src 'self' https://github.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self'; img-src 'self' data: https:; connect-src 'self' https://get.geojs.io https://api.open-meteo.com https://api.counterapi.dev; frame-src 'self' https://github.com;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Smalleyes 0m364 Concepts - Memory Shards: A Nodal Architecture for Resilient Associative Intelligence">
@@ -18,7 +18,7 @@
                 <a href="products.html">Products</a>
                 <a href="concepts.html" class="active">Concepts</a>
                 <a href="contact.html">Contact</a>
-                <a href="#" id="sitrep-btn" onclick="openModal(event)">OSINT</a>
+                <a href="#" id="sitrep-btn">OSINT</a>
             </nav>
             <div id="local-info" class="local-info-widget"></div>
         </div>
@@ -79,11 +79,15 @@
             <p>&copy; 2026 Smalleyes 0m364. All Rights Reserved. | <a href="https://www.0m364.com" target="_blank" rel="noopener noreferrer">www.0m364.com</a></p>
         </div>
     </footer>
+<script src="modal.js"></script>
 <script src="widget.js"></script>
 
 <div id="sitrep-modal" role="dialog" aria-modal="true" aria-label="Situation Report" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
     <div style="width: 80%; max-width: 800px; height: 80vh; background: #000; border: 2px solid #00ff00; border-radius: 5px; box-shadow: 0 0 20px rgba(0,255,0,0.2); font-family: monospace; color: #00ff00; padding: 20px; position: relative; overflow-y: auto;">
         <button type="button" aria-label="Close" style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 1.2rem; color: #00ff00; background: transparent; border: none; padding: 5px;" id="close-sitrep" onclick="closeModal()">x</button>
+<div id="sitrep-modal" class="sitrep-modal-overlay">
+    <div class="sitrep-modal-content">
+        <div class="sitrep-modal-close" id="close-sitrep">x</div>
         <div id="sitrep-content">
             <p><strong>BLUF:</strong> The shift from localized skirmish to structural energy war is complete; Brent Crude’s 30% monthly forecast leap confirms the world has priced in a permanent state of kinetic friction in the Middle East.</p>
             <br>
@@ -109,24 +113,7 @@
     </div>
 </div>
 
-<script>
-    function openModal(e) {
-        if(e) e.preventDefault();
-        document.getElementById('sitrep-modal').style.display = 'flex';
-    }
-    function closeModal() {
-        document.getElementById('sitrep-modal').style.display = 'none';
-    }
 
-    // Fallback if needed
-    window.onload = function() {
-        const btn = document.getElementById('sitrep-btn');
-        if(btn) btn.onclick = openModal;
-
-        const closeBtn = document.getElementById('close-sitrep');
-        if(closeBtn) closeBtn.onclick = closeModal;
-    }
-</script>
 
 </body>
 </html>
