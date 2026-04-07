@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         const utcTime = new Intl.DateTimeFormat([], utcOptions).format(new Date());
 
+        const escapeHtmlWidget = (unsafe) => String(unsafe).replace(/[&<"'>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m] || m);
+        container.innerHTML = `<span>📍 ${escapeHtmlWidget(city)}</span> | <span>🕒 ${escapeHtmlWidget(localTime)} LCL / ${escapeHtmlWidget(utcTime)} UTC</span> | <span>🌡️ ${escapeHtmlWidget(temp)}°F</span>`;
         container.innerHTML = ''; // Clear existing content
 
         const locSpan = document.createElement('span');
