@@ -61,7 +61,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         const utcTime = new Intl.DateTimeFormat([], utcOptions).format(new Date());
 
-        container.innerHTML = `<span>📍 ${city}</span> | <span>🕒 ${localTime} LCL / ${utcTime} UTC</span> | <span>🌡️ ${temp}°F</span>`;
+        const escapeHtmlWidget = (unsafe) => String(unsafe).replace(/[&<"'>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m] || m);
+        container.innerHTML = `<span>📍 ${escapeHtmlWidget(city)}</span> | <span>🕒 ${escapeHtmlWidget(localTime)} LCL / ${escapeHtmlWidget(utcTime)} UTC</span> | <span>🌡️ ${escapeHtmlWidget(temp)}°F</span>`;
+        container.innerHTML = ''; // Clear existing content
+
+        const locSpan = document.createElement('span');
+        locSpan.textContent = `📍 ${city}`;
+
+        const timeSpan = document.createElement('span');
+        timeSpan.textContent = `🕒 ${localTime} LCL / ${utcTime} UTC`;
+
+        const tempSpan = document.createElement('span');
+        tempSpan.textContent = `🌡️ ${temp}°F`;
+
+        container.appendChild(locSpan);
+        container.appendChild(document.createTextNode(' | '));
+        container.appendChild(timeSpan);
+        container.appendChild(document.createTextNode(' | '));
+        container.appendChild(tempSpan);
 
     } catch (error) {
         console.error('Error fetching local info:', error);
@@ -76,9 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inject modal HTML
     const modalHtml = `
-    <div id="terminal-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
+    <div id="terminal-modal" role="dialog" aria-modal="true" aria-label="WebSDR Terminal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
         <div style="width: 80%; max-width: 600px; height: 400px; background: #000; border: 2px solid #333; border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.5); font-family: monospace; color: #fff; padding: 20px; position: relative; overflow-y: auto;">
-            <div style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 1.2rem; color: #aaa;" id="close-terminal">x</div>
+            <button type="button" aria-label="Close terminal" style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 1.2rem; color: #aaa; background: transparent; border: none; padding: 5px;" id="close-terminal">x</button>
             <div id="terminal-output">
                 Root@bt:~# ssh websdr.0m364.com<br>
             </div>
@@ -112,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function escapeHtml(unsafe) {
-        return unsafe
+        return String(unsafe)
              .replace(/&/g, "&amp;")
              .replace(/</g, "&lt;")
              .replace(/>/g, "&gt;")
@@ -148,19 +165,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 output.innerHTML += `Password: ${'*'.repeat(val.length)}<br>`;
 
                 try {
-                    const encrypted = 'U2FsdGVkX1/hBV++BeqMbngTJUutPCH2DCHQQHernak=';
+                    const encryptedUrl = 'U2FsdGVkX1+bdRJbcPFy/5tD1hGoHOBkO8HnXSSNT/9xkwiQeQ5/HX99yDzOQGDRZRunRS+WnZDcI3GC9u/2qxtOfItKpxHhdoJuLDRz3d0=';
                     if (typeof CryptoJS !== 'undefined') {
-                        const bytes = CryptoJS.AES.decrypt(encrypted, val);
-                        const originalText = bytes.toString(CryptoJS.enc.Utf8);
+                        const bytes = CryptoJS.AES.decrypt(encryptedUrl, val);
+                        const decryptedUrl = bytes.toString(CryptoJS.enc.Utf8);
 
-                        if (originalText === 'ACCESS_GRANTED') {
+                        if (decryptedUrl.startsWith('https://')) {
                             inputLine.style.display = 'none';
                             output.innerHTML += `<span style="color: #0f0;">Access Granted. Decrypting signal intelligence...</span><br>`;
 
                             try {
-                                const res = await fetch('https://api.counterapi.dev/v1/0m364/websdr_login_attempts/up');
+                                const res = await fetch(decryptedUrl);
                                 const data = await res.json();
-                                output.innerHTML += `<span style="color: #0f0;">Connection Established. Successful accesses: ${data.count}</span><br>`;
+                                output.innerHTML += `<span style="color: #0f0;">Connection Established. Successful accesses: ${escapeHtml(data.count)}</span><br>`;
                             } catch (err) {
                                 output.innerHTML += `<span style="color: #0f0;">Connection Established. Counter unavailable.</span><br>`;
                             }
