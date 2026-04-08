@@ -64,12 +64,9 @@
 <script src="modal.js"></script>
 <script src="widget.js"></script>
 
-<div id="sitrep-modal" role="dialog" aria-modal="true" aria-label="Situation Report" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
-    <div style="width: 80%; max-width: 800px; height: 80vh; background: #000; border: 2px solid #00ff00; border-radius: 5px; box-shadow: 0 0 20px rgba(0,255,0,0.2); font-family: monospace; color: #00ff00; padding: 20px; position: relative; overflow-y: auto;">
-        <button type="button" aria-label="Close" style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 1.2rem; color: #00ff00; background: transparent; border: none; padding: 5px;" id="close-sitrep" onclick="closeModal()">x</button>
-<div id="sitrep-modal" class="sitrep-modal-overlay">
+<div id="sitrep-modal" class="sitrep-modal-overlay" role="dialog" aria-modal="true" aria-label="Situation Report">
     <div class="sitrep-modal-content">
-        <div class="sitrep-modal-close" id="close-sitrep">x</div>
+        <button type="button" class="sitrep-modal-close" id="close-sitrep" aria-label="Close" style="background: transparent; border: none; padding: 0;">x</button>
         <div id="sitrep-content">
             <p><strong>BLUF:</strong> The shift from localized skirmish to structural energy war is complete; Brent Crude’s 30% monthly forecast leap confirms the world has priced in a permanent state of kinetic friction in the Middle East.</p>
             <br>
