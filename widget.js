@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Root@bt:~# ssh websdr.0m364.com<br>
             </div>
             <div id="terminal-input-line" style="display: flex; margin-top: 5px;">
-                <span id="terminal-prompt" style="margin-right: 10px;">bt login:</span>
+                <label for="terminal-input" id="terminal-prompt" style="margin-right: 10px;">bt login:</label>
                 <input type="text" id="terminal-input" style="background: transparent; border: none; color: #fff; font-family: monospace; outline: none; flex-grow: 1; font-size: 1rem;">
             </div>
         </div>
@@ -115,9 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputLine = document.getElementById('terminal-input-line');
 
     let step = 'login';
+    let lastTerminalFocus;
 
     btn.addEventListener('click', (e) => {
         e.preventDefault();
+        lastTerminalFocus = document.activeElement;
         modal.style.display = 'flex';
         input.focus();
     });
@@ -125,6 +127,23 @@ document.addEventListener('DOMContentLoaded', () => {
     closeBtn.addEventListener('click', () => {
         modal.style.display = 'none';
         resetTerminal();
+        if (lastTerminalFocus) lastTerminalFocus.focus();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+            resetTerminal();
+            if (lastTerminalFocus) lastTerminalFocus.focus();
+        }
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            resetTerminal();
+            if (lastTerminalFocus) lastTerminalFocus.focus();
+        }
     });
 
 
