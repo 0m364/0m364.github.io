@@ -4,14 +4,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let lastFocusedElement;
 
-    const openModal = (e) => {
+const openModal = (e) => {
         if (e) e.preventDefault();
         lastFocusedElement = document.activeElement;
         sitrepModal.style.display = 'flex';
 
-        // Focus the close button or modal content for screen readers and keyboard users
-        const closeBtn = document.getElementById('close-sitrep');
-        if (closeBtn) closeBtn.focus();
+        // Make content scrollable for keyboard users
+        const contentContainer = sitrepModal.querySelector('.sitrep-modal-content');
+        if (contentContainer) {
+            contentContainer.setAttribute('tabindex', '0');
+        }
+
+        // Focus the content container or close button
+        if (contentContainer) {
+            contentContainer.focus();
+        } else {
+            const closeBtn = document.getElementById('close-sitrep');
+            if (closeBtn) closeBtn.focus();
+        }
     };
 
     const closeModal = () => {
@@ -20,6 +30,27 @@ document.addEventListener('DOMContentLoaded', () => {
             lastFocusedElement.focus();
         }
     };
+
+    // Focus Trap
+    sitrepModal.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            const focusableElements = sitrepModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+
+            if (e.shiftKey) { // Shift + Tab
+                if (document.activeElement === firstElement) {
+                    lastElement.focus();
+                    e.preventDefault();
+                }
+            } else { // Tab
+                if (document.activeElement === lastElement) {
+                    firstElement.focus();
+                    e.preventDefault();
+                }
+            }
+        }
+    });
 
     // Open modal
     const btns = document.querySelectorAll('#sitrep-btn');
