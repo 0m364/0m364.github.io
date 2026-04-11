@@ -141,6 +141,7 @@ footer a:hover {
 .navigation a:hover, .navigation a.active {
     background-color: var(--accent-color);
     border-color: var(--accent-color);
+    color: #000000;
 }
 
 /* Contact Links & Buttons */
@@ -163,7 +164,7 @@ footer a:hover {
     justify-content: center;
     gap: 10px;
     background-color: var(--secondary-color);
-    color: var(--white);
+    color: #000000;
     padding: 1rem 2rem;
     border-radius: 8px;
     text-decoration: none;
@@ -199,6 +200,7 @@ footer a:hover {
 
 .square-button {
     background-color: #006aff; /* Square's approximate brand color */
+    color: #ffffff;
 }
 
 .square-button:hover {

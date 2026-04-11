@@ -80,8 +80,6 @@ END:VCARD"""
         mock_instance.make_image.assert_called_once_with(fill_color="black", back_color="white")
         mock_img.save.assert_called_once_with(output)
 
-    def test_generate_vcard_qr_injection(self):
-
     def test_generate_vcard_qr_sanitization(self):
         # Setup mock
         mock_qrcode = mock_qrcode_module.QRCode
@@ -105,14 +103,16 @@ END:VCARD"""
         safe_title = "EngineerNOTE:Injected"
 
         # Verify vCard format has no newlines within the fields
-        expected_vcard = f"""BEGIN:VCARD
-VERSION:3.0
-N:{safe_name};;;;
-FN:{safe_name}
-ORG:{safe_org}
-TITLE:{safe_title}
-EMAIL;type=INTERNET;type=WORK;type=pref:{email}
-URL:{url}
+        expected_vcard = f"BEGIN:VCARD\nVERSION:3.0\nN:{safe_name};;;;\nFN:{safe_name}\nORG:{safe_org}\nTITLE:{safe_title}\nEMAIL;type=INTERNET;type=WORK;type=pref:{email}\nURL:{url}\nEND:VCARD"
+        mock_instance.add_data.assert_called_once_with(expected_vcard)
+
+    def test_generate_vcard_qr_injection(self):
+        # Setup mock
+        mock_qrcode = mock_qrcode_module.QRCode
+        mock_instance = mock_qrcode.return_value
+        mock_img = MagicMock()
+        mock_instance.make_image.return_value = mock_img
+
         name = "John\nDoe"
         org = "Example\r\nCorp"
         title = "Engi\nneer"
@@ -129,15 +129,7 @@ URL:{url}
         expected_email = "john@example.com"
         expected_url = "https://example.com/evil"
 
-        expected_vcard = f"""BEGIN:VCARD
-VERSION:3.0
-N:{expected_name};;;;
-FN:{expected_name}
-ORG:{expected_org}
-TITLE:{expected_title}
-EMAIL;type=INTERNET;type=WORK;type=pref:{expected_email}
-URL:{expected_url}
-END:VCARD"""
+        expected_vcard = f"BEGIN:VCARD\nVERSION:3.0\nN:{expected_name};;;;\nFN:{expected_name}\nORG:{expected_org}\nTITLE:{expected_title}\nEMAIL;type=INTERNET;type=WORK;type=pref:{expected_email}\nURL:{expected_url}\nEND:VCARD"
         mock_instance.add_data.assert_called_once_with(expected_vcard)
 
     @patch('generate_qr.generate_url_qr')
