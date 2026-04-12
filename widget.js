@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const container = document.getElementById('local-info');
     if (!container) return;
 
+    container.innerHTML = `<span aria-hidden="true">⏳</span><span>Synchronizing telemetry...</span>`;
+    container.style.opacity = '0.7';
+
     const CACHE_KEY = 'om364_local_info_cache';
     const CACHE_TTL = 30 * 60 * 1000; // 30 minutes in ms
 
@@ -62,7 +65,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const utcTime = new Intl.DateTimeFormat([], utcOptions).format(new Date());
 
         const escapeHtmlWidget = (unsafe) => String(unsafe).replace(/[&<"'>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m] || m);
-        container.innerHTML = `<span>📍 ${escapeHtmlWidget(city)}</span> | <span>🕒 ${escapeHtmlWidget(localTime)} LCL / ${escapeHtmlWidget(utcTime)} UTC</span> | <span>🌡️ ${escapeHtmlWidget(temp)}°F</span>`;
         container.innerHTML = ''; // Clear existing content
 
         const locSpan = document.createElement('span');
@@ -82,6 +84,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error('Error fetching local info:', error);
+        container.innerHTML = `<span aria-hidden="true">⚠️</span><span>Telemetry currently unavailable</span>`;
+    } finally {
+        container.style.opacity = '1';
     }
 });
 
