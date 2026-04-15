@@ -13,3 +13,7 @@
 ## 2026-04-12 - Loading States for Async Widgets
 **Learning:** The local-info widget fetches IP and weather data asynchronously. Without a loading state, the UI container pops into existence or stays empty, which looks janky or broken to users on slow connections. When errors occur, silent failures leave the user wondering if the widget is broken.
 **Action:** Always provide immediate visual feedback (like a loading message or skeleton state) when initiating an async fetch that updates the UI. If the fetch fails, show a graceful error state rather than failing silently or leaving the UI blank. Ensure icons used in states have `aria-hidden="true"`.
+
+## 2024-05-26 - Modal Close Button Accessibility and Click Targets
+**Learning:** Decorative text characters like 'x' used for close buttons are often announced by screen readers alongside the `aria-label`, creating redundant noise (e.g., "Close, x, button"). Additionally, inline styles stripping padding from these buttons severely reduce the click target size, making them difficult to use, and a lack of hover/focus styles makes discoverability poor for sighted keyboard users.
+**Action:** Always wrap visual close characters (like `&times;`) in `<span aria-hidden="true">` to hide them from screen readers when an `aria-label` is present. Move button styling to CSS to ensure adequate padding for click targets, and always define explicit `:hover` and `:focus-visible` states. Use a `title` attribute (e.g., `title="Close (Esc)"`) to hint at available keyboard shortcuts.
