@@ -261,8 +261,24 @@ footer a:hover {
     top: 5px;
     right: 10px;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: #00ff00;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    line-height: 1;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.sitrep-modal-close:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+    transform: scale(1.1);
+}
+
+.sitrep-modal-close:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
 }
 
 /* Contact Specific Styles */
