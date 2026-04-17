@@ -14,6 +14,10 @@
 **Learning:** The local-info widget fetches IP and weather data asynchronously. Without a loading state, the UI container pops into existence or stays empty, which looks janky or broken to users on slow connections. When errors occur, silent failures leave the user wondering if the widget is broken.
 **Action:** Always provide immediate visual feedback (like a loading message or skeleton state) when initiating an async fetch that updates the UI. If the fetch fails, show a graceful error state rather than failing silently or leaving the UI blank. Ensure icons used in states have `aria-hidden="true"`.
 
-## 2026-04-14 - Modal Close Button Accessibility and Screen Reader Feedback
-**Learning:** Using raw text like 'x' inside a close button, even with an `aria-label="Close"`, can cause screen readers to announce both the label and the character (e.g., "Close x button"), creating redundant noise. Furthermore, inline styles on buttons often miss crucial interactive feedback states like `:hover` and `:focus-visible`, and fail to provide adequate click targets.
-**Action:** Always wrap decorative closing characters (like `&times;`) in a `<span aria-hidden="true">` to silence them for screen readers while relying solely on the `aria-label`. Extract inline styles to CSS to add appropriate padding for touch targets, and ensure `:hover` and `:focus-visible` states are defined. Add `title` attributes for discoverable keyboard shortcuts (e.g., 'Close (Esc)').
+## 2026-05-15 - Modal Close Button Polishing and Target Sizes
+**Learning:** Even when semantic `<button>` tags are used for modal dismissal, failing to provide adequate click target padding and meaningful visual feedback (hover/focus states) degrades the experience. Furthermore, using a literal "x" character without `aria-hidden="true"` causes screen readers to read "x" redundantly alongside the `aria-label="Close"`, creating noise.
+**Action:** Ensure modal close buttons use a larger click area (e.g., `padding: 10px; font-size: 1.5rem`), implement clear `:hover` and `:focus-visible` styles, and utilize the `&times;` entity enclosed in `<span aria-hidden="true">` to prevent screen reader redundancy. Add `title="Close (Esc)"` to provide discoverable keyboard shortcut hints.
+
+## 2026-04-17 - Decorative Emoji Accessibility
+**Learning:** Decorative text emojis (like 📍, 🕒, 🌡️, 🤗) behave like raw text to screen readers, causing them to be read aloud (e.g., "round pushpin", "three o'clock") which adds redundant noise to the actual content ("Williamsburg", "15:00 LCL").
+**Action:** Always treat decorative text emojis the same as SVG icons. Wrap them in a `<span>` element with `aria-hidden="true"` to prevent screen readers from announcing them, while keeping the visual experience intact.
