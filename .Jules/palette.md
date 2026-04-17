@@ -17,3 +17,7 @@
 ## 2026-05-15 - Modal Close Button Polishing and Target Sizes
 **Learning:** Even when semantic `<button>` tags are used for modal dismissal, failing to provide adequate click target padding and meaningful visual feedback (hover/focus states) degrades the experience. Furthermore, using a literal "x" character without `aria-hidden="true"` causes screen readers to read "x" redundantly alongside the `aria-label="Close"`, creating noise.
 **Action:** Ensure modal close buttons use a larger click area (e.g., `padding: 10px; font-size: 1.5rem`), implement clear `:hover` and `:focus-visible` styles, and utilize the `&times;` entity enclosed in `<span aria-hidden="true">` to prevent screen reader redundancy. Add `title="Close (Esc)"` to provide discoverable keyboard shortcut hints.
+
+## 2026-04-17 - Decorative Emoji Accessibility
+**Learning:** Decorative text emojis (like 📍, 🕒, 🌡️, 🤗) behave like raw text to screen readers, causing them to be read aloud (e.g., "round pushpin", "three o'clock") which adds redundant noise to the actual content ("Williamsburg", "15:00 LCL").
+**Action:** Always treat decorative text emojis the same as SVG icons. Wrap them in a `<span>` element with `aria-hidden="true"` to prevent screen readers from announcing them, while keeping the visual experience intact.
