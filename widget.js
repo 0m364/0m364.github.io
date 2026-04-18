@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const container = document.getElementById('local-info');
     if (!container) return;
 
+    container.innerHTML = `<span aria-hidden="true">⏳</span><span>Synchronizing telemetry...</span>`;
+    container.style.opacity = '0.7';
+
     const CACHE_KEY = 'om364_local_info_cache';
     const CACHE_TTL = 30 * 60 * 1000; // 30 minutes in ms
 
@@ -61,6 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
         const utcTime = new Intl.DateTimeFormat([], utcOptions).format(new Date());
 
+        const escapeHtmlWidget = (unsafe) => String(unsafe).replace(/[&<"'>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m] || m);
         container.innerHTML = ''; // Clear existing content
 
         const locSpan = document.createElement('span');
@@ -80,6 +84,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error('Error fetching local info:', error);
+        container.innerHTML = `<span aria-hidden="true">⚠️</span><span>Telemetry currently unavailable</span>`;
+    } finally {
+        container.style.opacity = '1';
     }
 });
 
@@ -93,8 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalHtml = `
     <div id="terminal-modal" role="dialog" aria-modal="true" aria-label="WebSDR Terminal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;">
         <div style="width: 80%; max-width: 600px; height: 400px; background: #000; border: 2px solid #333; border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.5); font-family: monospace; color: #fff; padding: 20px; position: relative; overflow-y: auto;">
-            <button type="button" aria-label="Close terminal" style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 1.2rem; color: #aaa; background: transparent; border: none; padding: 5px;" id="close-terminal">x</button>
-            <div id="terminal-output">
+            <button type="button" aria-label="Close terminal" title="Close (Esc)" style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 1.5rem; color: #aaa; background: transparent; border: none; padding: 10px; line-height: 1; border-radius: 4px; transition: background-color 0.2s ease, transform 0.1s ease;" id="close-terminal" onmouseover="this.style.backgroundColor='rgba(170, 170, 170, 0.1)'; this.style.transform='scale(1.1)';" onmouseout="this.style.backgroundColor='transparent'; this.style.transform='scale(1)';">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div id="terminal-output" aria-live="polite" aria-atomic="false">
                 Root@bt:~# ssh websdr.0m364.com<br>
             </div>
             <div id="terminal-input-line" style="display: flex; margin-top: 5px;">

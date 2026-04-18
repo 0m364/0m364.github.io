@@ -9,3 +9,19 @@
 ## 2026-04-11 - Scrollable Modal Content Accessibility
 **Learning:** When modals contain large amounts of text (like the Sitrep modal), visual users can scroll easily, but keyboard-only users cannot scroll unless the scrollable container itself receives focus. Additionally, without a focus trap, users tabbing through a modal will eventually tab into the hidden background page elements, losing context.
 **Action:** Always add `tabindex="0"` to internally scrollable containers so arrow keys work for keyboard users. Implement a simple "focus trap" logic on `keydown` (Tab) inside custom modals to cycle focus between the modal's interactive elements and prevent escaping to the background document.
+
+## 2026-04-12 - Loading States for Async Widgets
+**Learning:** The local-info widget fetches IP and weather data asynchronously. Without a loading state, the UI container pops into existence or stays empty, which looks janky or broken to users on slow connections. When errors occur, silent failures leave the user wondering if the widget is broken.
+**Action:** Always provide immediate visual feedback (like a loading message or skeleton state) when initiating an async fetch that updates the UI. If the fetch fails, show a graceful error state rather than failing silently or leaving the UI blank. Ensure icons used in states have `aria-hidden="true"`.
+
+## 2026-05-15 - Modal Close Button Polishing and Target Sizes
+**Learning:** Even when semantic `<button>` tags are used for modal dismissal, failing to provide adequate click target padding and meaningful visual feedback (hover/focus states) degrades the experience. Furthermore, using a literal "x" character without `aria-hidden="true"` causes screen readers to read "x" redundantly alongside the `aria-label="Close"`, creating noise.
+**Action:** Ensure modal close buttons use a larger click area (e.g., `padding: 10px; font-size: 1.5rem`), implement clear `:hover` and `:focus-visible` styles, and utilize the `&times;` entity enclosed in `<span aria-hidden="true">` to prevent screen reader redundancy. Add `title="Close (Esc)"` to provide discoverable keyboard shortcut hints.
+
+## 2026-04-17 - Decorative Emoji Accessibility
+**Learning:** Decorative text emojis (like 📍, 🕒, 🌡️, 🤗) behave like raw text to screen readers, causing them to be read aloud (e.g., "round pushpin", "three o'clock") which adds redundant noise to the actual content ("Williamsburg", "15:00 LCL").
+**Action:** Always treat decorative text emojis the same as SVG icons. Wrap them in a `<span>` element with `aria-hidden="true"` to prevent screen readers from announcing them, while keeping the visual experience intact.
+
+## 2026-04-18 - Accessible Dynamically Updating Pseudo-Terminals
+**Learning:** When building custom interactive terminal or log interfaces, standard input focus doesn't trigger screen readers to announce new lines added to the terminal output container. As a result, users relying on assistive technologies type commands but receive no audio feedback when the terminal responds.
+**Action:** Apply `aria-live="polite"` and `aria-atomic="false"` to the container element where dynamic output is appended. This ensures screen readers announce only the new lines as they appear without interrupting the user's typing or reading the entire history.

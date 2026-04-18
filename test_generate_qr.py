@@ -40,6 +40,37 @@ class TestGenerateQR(unittest.TestCase):
         mock_instance.make_image.assert_called_once_with(fill_color="black", back_color="white")
         mock_img.save.assert_called_once_with(output)
 
+    def test_generate_url_qr_path_traversal(self):
+        # Setup mock
+        mock_qrcode = mock_qrcode_module.QRCode
+        mock_instance = mock_qrcode.return_value
+        mock_img = MagicMock()
+        mock_instance.make_image.return_value = mock_img
+
+        # Call the function with path traversal attempt
+        url = "https://example.com"
+        output = "../../secret.png"
+        generate_qr.generate_url_qr(url, output)
+
+        # Verify it only used the basename
+        mock_img.save.assert_called_once_with("secret.png")
+
+    def test_generate_url_qr_special_characters(self):
+        # Setup mock
+        mock_qrcode = mock_qrcode_module.QRCode
+        mock_instance = mock_qrcode.return_value
+        mock_img = MagicMock()
+        mock_instance.make_image.return_value = mock_img
+
+        # Call the function with special characters in URL
+        url = "https://example.com/search?q=test&lang=en#results"
+        output = "test_special_qr.png"
+        generate_qr.generate_url_qr(url, output)
+
+        # Verify URL is passed intact
+        mock_instance.add_data.assert_called_once_with(url)
+        mock_img.save.assert_called_once_with(output)
+
     def test_generate_vcard_qr(self):
         # Setup mock
         mock_qrcode = mock_qrcode_module.QRCode
