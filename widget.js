@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <button type="button" aria-label="Close terminal" title="Close (Esc)" style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 1.5rem; color: #aaa; background: transparent; border: none; padding: 10px; line-height: 1; border-radius: 4px; transition: background-color 0.2s ease, transform 0.1s ease;" id="close-terminal" onmouseover="this.style.backgroundColor='rgba(170, 170, 170, 0.1)'; this.style.transform='scale(1.1)';" onmouseout="this.style.backgroundColor='transparent'; this.style.transform='scale(1)';">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <div id="terminal-output">
+            <div id="terminal-output" aria-live="polite" aria-atomic="false">
                 Root@bt:~# ssh websdr.0m364.com<br>
             </div>
             <div id="terminal-input-line" style="display: flex; margin-top: 5px;">

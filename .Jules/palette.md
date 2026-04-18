@@ -21,3 +21,7 @@
 ## 2026-04-17 - Decorative Emoji Accessibility
 **Learning:** Decorative text emojis (like 📍, 🕒, 🌡️, 🤗) behave like raw text to screen readers, causing them to be read aloud (e.g., "round pushpin", "three o'clock") which adds redundant noise to the actual content ("Williamsburg", "15:00 LCL").
 **Action:** Always treat decorative text emojis the same as SVG icons. Wrap them in a `<span>` element with `aria-hidden="true"` to prevent screen readers from announcing them, while keeping the visual experience intact.
+
+## 2026-04-18 - Accessible Dynamically Updating Pseudo-Terminals
+**Learning:** When building custom interactive terminal or log interfaces, standard input focus doesn't trigger screen readers to announce new lines added to the terminal output container. As a result, users relying on assistive technologies type commands but receive no audio feedback when the terminal responds.
+**Action:** Apply `aria-live="polite"` and `aria-atomic="false"` to the container element where dynamic output is appended. This ensures screen readers announce only the new lines as they appear without interrupting the user's typing or reading the entire history.
