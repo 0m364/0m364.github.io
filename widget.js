@@ -68,13 +68,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         container.innerHTML = ''; // Clear existing content
 
         const locSpan = document.createElement('span');
-        locSpan.textContent = `📍 ${city}`;
+        const locEmoji = document.createElement('span');
+        locEmoji.setAttribute('aria-hidden', 'true');
+        locEmoji.textContent = '📍 ';
+        locSpan.appendChild(locEmoji);
+        locSpan.appendChild(document.createTextNode(city));
 
         const timeSpan = document.createElement('span');
-        timeSpan.textContent = `🕒 ${localTime} LCL / ${utcTime} UTC`;
+        const timeEmoji = document.createElement('span');
+        timeEmoji.setAttribute('aria-hidden', 'true');
+        timeEmoji.textContent = '🕒 ';
+        timeSpan.appendChild(timeEmoji);
+        timeSpan.appendChild(document.createTextNode(`${localTime} LCL / ${utcTime} UTC`));
 
         const tempSpan = document.createElement('span');
-        tempSpan.textContent = `🌡️ ${temp}°F`;
+        const tempEmoji = document.createElement('span');
+        tempEmoji.setAttribute('aria-hidden', 'true');
+        tempEmoji.textContent = '🌡️ ';
+        tempSpan.appendChild(tempEmoji);
+        tempSpan.appendChild(document.createTextNode(`${temp}°F`));
 
         container.appendChild(locSpan);
         container.appendChild(document.createTextNode(' | '));
