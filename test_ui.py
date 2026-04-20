@@ -1,7 +1,5 @@
 import asyncio
 from playwright.async_api import async_playwright
-import time
-import os
 
 async def run():
     async with async_playwright() as p:
@@ -36,7 +34,10 @@ async def run():
         except Exception as e:
             print("❌ Failed to verify error state.", e)
 
-        await page.screenshot(path="/home/jules/verification/screenshots/error_state.png")
+        try:
+            await page.screenshot(path="/home/jules/verification/screenshots/error_state.png", animations="disabled", timeout=5000)
+        except Exception as e:
+            print(f"Warning: Screenshot failed (likely font timeout): {e}")
         await page.wait_for_timeout(1000)
 
         await context.close()
