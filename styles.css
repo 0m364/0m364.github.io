@@ -21,6 +21,23 @@ body {
     background-color: var(--light-bg);
 }
 
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-color);
+    color: #000000;
+    padding: 8px;
+    z-index: 10000;
+    transition: top 0.2s ease-in-out;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
 a:focus-visible, button:focus-visible, input:focus-visible {
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;
