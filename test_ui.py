@@ -39,6 +39,38 @@ async def run():
         await page.screenshot(path="/home/jules/verification/screenshots/error_state.png")
         await page.wait_for_timeout(1000)
 
+        print("Testing skip link accessibility...")
+        await page.goto('http://127.0.0.1:8000/index.html', wait_until='domcontentloaded')
+
+        try:
+            # Press Tab to focus the skip link
+            await page.keyboard.press('Tab')
+
+            # Check if it has focus
+            is_focused = await page.evaluate("document.activeElement.classList.contains('skip-link')")
+            if is_focused:
+                print("✅ Skip link received focus.")
+                await page.screenshot(path="/home/jules/verification/screenshots/skip_link_focused.png")
+            else:
+                print("❌ Skip link did not receive focus.")
+
+            # Press Enter to follow the link
+            await page.keyboard.press('Enter')
+            await page.wait_for_timeout(500)
+
+            # Check if focus moved to main content
+            active_id = await page.evaluate("document.activeElement.id")
+            # Usually jumping to a hash anchor makes the target element the :target, but may not shift activeElement unless it has tabindex="-1".
+            # Let's check the hash.
+            current_hash = await page.evaluate("window.location.hash")
+            if current_hash == "#main-content":
+                 print("✅ Hash updated to #main-content.")
+            else:
+                 print("❌ Hash not updated.")
+
+        except Exception as e:
+            print("❌ Failed to verify skip link.", e)
+
         await context.close()
         await browser.close()
 
