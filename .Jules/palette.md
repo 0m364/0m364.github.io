@@ -25,3 +25,7 @@
 ## 2026-04-18 - Accessible Dynamically Updating Pseudo-Terminals
 **Learning:** When building custom interactive terminal or log interfaces, standard input focus doesn't trigger screen readers to announce new lines added to the terminal output container. As a result, users relying on assistive technologies type commands but receive no audio feedback when the terminal responds.
 **Action:** Apply `aria-live="polite"` and `aria-atomic="false"` to the container element where dynamic output is appended. This ensures screen readers announce only the new lines as they appear without interrupting the user's typing or reading the entire history.
+
+## 2024-05-26 - Visually Hidden Skip to Content Links
+**Learning:** Adding a "Skip to main content" link at the beginning of the `<body>` is crucial for keyboard and screen reader accessibility, particularly when a site has extensive navigation before the primary content. The `main` content area needs an `id="main-content"` so the anchor tag can route accurately.
+**Action:** Always include a visually hidden 'Skip to main content' link immediately after the opening `<body>` tag that becomes visible on `:focus`. Ensure the main content container has a matching `id` attribute. This is a standard accessibility requirement for the project.

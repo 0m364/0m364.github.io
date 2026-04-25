@@ -324,3 +324,25 @@ footer a:hover {
 .websdr-home-link {
     display: inline-block;
 }
+
+/* Skip to main content link */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--accent-color);
+    color: #000000;
+    padding: 0.5rem 1rem;
+    z-index: 9999;
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+}
