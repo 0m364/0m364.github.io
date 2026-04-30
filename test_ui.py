@@ -42,5 +42,39 @@ async def run():
         await context.close()
         await browser.close()
 
+async def run_focus_test():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(
+            headless=True,
+            args=[
+                '--font-render-hinting=none',
+                '--disable-features=IsolateOrigins,site-per-process'
+            ]
+        )
+        context = await browser.new_context(
+            record_video_dir="/home/jules/verification/videos"
+        )
+        page = await context.new_page()
+
+        print("Testing keyboard focus...")
+        await page.goto('http://127.0.0.1:8000/index.html', wait_until='domcontentloaded')
+
+        try:
+            await page.wait_for_timeout(2000)
+        except Exception as e:
+            print("❌ Failed to wait.", e)
+
+        # Press Tab repeatedly to cycle focus
+        for i in range(10):
+            await page.keyboard.press("Tab")
+            await page.wait_for_timeout(200)
+            await page.screenshot(path=f"/home/jules/verification/screenshots/focus_{i}.png")
+
+        print("✅ Keyboard focus test done.")
+
+        await context.close()
+        await browser.close()
+
 if __name__ == '__main__':
     asyncio.run(run())
+    asyncio.run(run_focus_test())
