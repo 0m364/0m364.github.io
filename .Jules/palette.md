@@ -25,3 +25,7 @@
 ## 2026-04-18 - Accessible Dynamically Updating Pseudo-Terminals
 **Learning:** When building custom interactive terminal or log interfaces, standard input focus doesn't trigger screen readers to announce new lines added to the terminal output container. As a result, users relying on assistive technologies type commands but receive no audio feedback when the terminal responds.
 **Action:** Apply `aria-live="polite"` and `aria-atomic="false"` to the container element where dynamic output is appended. This ensures screen readers announce only the new lines as they appear without interrupting the user's typing or reading the entire history.
+
+## 2026-05-19 - Skip Links and Keyboard Focus Consistency
+**Learning:** Skip links are essential for keyboard users to bypass repetitive navigation elements, but simply hiding them visually using absolute positioning off-screen (e.g., `top: -40px`) can be fragile across different screen sizes, font sizes, or zoom levels. Furthermore, linking to a main container that lacks `tabindex="-1"` fails to programmatically focus the container in some browsers, breaking the navigation flow.
+**Action:** Always include a visually hidden 'Skip to main content' link immediately after the opening `<body>` tag. Use `transform: translateY(-100%)` for robust hiding and display it on `:focus` using `transform: translateY(0)`. Ensure the main content container has a matching `id` attribute and explicitly set `tabindex="-1"` so it can consistently receive programmatic focus across all browsers.
