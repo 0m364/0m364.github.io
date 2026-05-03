@@ -17,6 +17,20 @@ async def run():
         )
         page = await context.new_page()
 
+        print("Testing skip link accessibility...")
+        await page.goto('http://127.0.0.1:8000/index.html', wait_until='domcontentloaded')
+        # Tab once to focus the skip link
+        await page.keyboard.press('Tab')
+        await page.wait_for_timeout(500)
+        await page.screenshot(path="/home/jules/verification/screenshots/skip_link_focused.png")
+
+        # Verify focus is on the skip link
+        skip_link_focused = await page.evaluate("document.activeElement.classList.contains('skip-link')")
+        if skip_link_focused:
+            print("✅ Skip link focus verified.")
+        else:
+            print("❌ Failed to verify skip link focus.")
+
         print("Testing loading and error states...")
 
         # Test Error State (block network requests to force error)
