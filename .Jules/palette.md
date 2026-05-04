@@ -25,3 +25,7 @@
 ## 2026-04-18 - Accessible Dynamically Updating Pseudo-Terminals
 **Learning:** When building custom interactive terminal or log interfaces, standard input focus doesn't trigger screen readers to announce new lines added to the terminal output container. As a result, users relying on assistive technologies type commands but receive no audio feedback when the terminal responds.
 **Action:** Apply `aria-live="polite"` and `aria-atomic="false"` to the container element where dynamic output is appended. This ensures screen readers announce only the new lines as they appear without interrupting the user's typing or reading the entire history.
+
+## 2024-05-04 - Robust Skip Links
+**Learning:** Using `transform: translateY(-100%)` for hidden skip links is more robust than magic numbers (e.g., `top: -40px`) because it adapts to any font size or padding. The main content container needs an ID matching the skip link's `href` and explicitly requires `tabindex="-1"` so it can reliably receive programmatic focus across all browsers.
+**Action:** Always pair visually hidden skip links with `transform` and ensure the target element uses `tabindex="-1"`.
