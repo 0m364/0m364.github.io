@@ -29,3 +29,7 @@
 ## 2026-06-12 - Robust Skip-to-Content Links
 **Learning:** Adding a "Skip to main content" link is a critical accessibility requirement for keyboard users. To make it robust, it needs to be hidden visually but appear when focused using `transform: translateY(-100%)` instead of magic pixel numbers, and the target container (e.g., `<main>`) must have a matching `id` and `tabindex="-1"` so it can programmatically receive focus across all browsers.
 **Action:** Always include a visually hidden 'Skip to main content' link immediately after the opening `<body>` tag. Set the main content container with an `id` and explicitly `tabindex="-1"`.
+
+## 2026-06-13 - Explicit Hover States and Background Inversion
+**Learning:** When creating hover states that invert or significantly change the background color of an element (like changing a light blue button background to black), failing to explicitly define a new text color causes the text to blend into the new background, resulting in invisible text and a confusing, inaccessible interaction.
+**Action:** Always explicitly define both `background-color` and `color` for `:hover` and `:focus` states, especially when inverting colors. Ensure `transition` properties include all color changes (like `color` and `border-color`) to maintain visual smoothness and focus discoverability.
