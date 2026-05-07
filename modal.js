@@ -56,6 +56,14 @@ const openModal = (e) => {
     const btns = document.querySelectorAll('#sitrep-btn');
     btns.forEach(btn => {
         btn.addEventListener('click', openModal);
+
+        // Add keyboard accessibility for a tags acting as buttons
+        btn.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Spacebar') {
+                e.preventDefault();
+                btn.click();
+            }
+        });
     });
 
     // Close modal via button
