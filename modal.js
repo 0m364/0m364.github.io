@@ -56,6 +56,12 @@ const openModal = (e) => {
     const btns = document.querySelectorAll('#sitrep-btn');
     btns.forEach(btn => {
         btn.addEventListener('click', openModal);
+        btn.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                openModal(e);
+            }
+        });
     });
 
     // Close modal via button
