@@ -29,3 +29,7 @@
 ## 2026-06-12 - Robust Skip-to-Content Links
 **Learning:** Adding a "Skip to main content" link is a critical accessibility requirement for keyboard users. To make it robust, it needs to be hidden visually but appear when focused using `transform: translateY(-100%)` instead of magic pixel numbers, and the target container (e.g., `<main>`) must have a matching `id` and `tabindex="-1"` so it can programmatically receive focus across all browsers.
 **Action:** Always include a visually hidden 'Skip to main content' link immediately after the opening `<body>` tag. Set the main content container with an `id` and explicitly `tabindex="-1"`.
+
+## 2026-06-25 - Anchor Tags as Buttons
+**Learning:** When using anchor tags (`<a>`) as buttons to open modals or trigger JavaScript actions, they lack native keyboard support for the `Spacebar` key, unlike true `<button>` elements. Screen readers also may not announce them correctly without `role="button"` and `aria-haspopup="dialog"`.
+**Action:** Always add `role="button"` and `aria-haspopup="dialog"` to anchor tags used as modal triggers. Additionally, bind a `keydown` event listener for the `Spacebar` key (`e.key === ' ' || e.code === 'Space'`), calling `e.preventDefault()` to stop page scrolling and invoking the action handler.
