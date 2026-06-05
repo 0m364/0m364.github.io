@@ -39,6 +39,19 @@ async def run():
         await page.screenshot(path="/home/jules/verification/screenshots/error_state.png")
         await page.wait_for_timeout(1000)
 
+        # Test Modal Keyboard Accessibility (Space key)
+        print("Testing modal keyboard accessibility...")
+        await page.goto('http://127.0.0.1:8000/concepts.html', wait_until='domcontentloaded')
+        try:
+            btn = page.locator('#sitrep-btn')
+            await btn.focus()
+            await btn.press('Space')
+            await page.wait_for_selector('#sitrep-modal', state='visible', timeout=2000)
+            print("✅ Modal keyboard accessibility (Space) verified.")
+            await page.screenshot(path="/home/jules/verification/screenshots/modal_opened_space.png")
+        except Exception as e:
+            print("❌ Failed to verify modal keyboard accessibility.", e)
+
         await context.close()
         await browser.close()
 
