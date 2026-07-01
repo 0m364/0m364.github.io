@@ -39,6 +39,27 @@ async def run():
         await page.screenshot(path="/home/jules/verification/screenshots/error_state.png")
         await page.wait_for_timeout(1000)
 
+        print("Testing modal trigger accessibility and keyboard support...")
+        try:
+            sitrep_btn = page.locator('#sitrep-btn')
+            role = await sitrep_btn.get_attribute('role')
+            haspopup = await sitrep_btn.get_attribute('aria-haspopup')
+
+            if role == 'button' and haspopup == 'dialog':
+                print("✅ ARIA attributes for modal trigger verified.")
+            else:
+                print(f"❌ Incorrect ARIA attributes: role={role}, aria-haspopup={haspopup}")
+
+            await sitrep_btn.focus()
+            await page.keyboard.press('Space')
+
+            modal = page.locator('#sitrep-modal')
+            await modal.wait_for(state='visible', timeout=2000)
+            print("✅ Modal opened via Spacebar.")
+
+        except Exception as e:
+            print("❌ Failed to verify modal trigger accessibility.", e)
+
         await context.close()
         await browser.close()
 
