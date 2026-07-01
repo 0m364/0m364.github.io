@@ -29,3 +29,7 @@
 ## 2026-06-12 - Robust Skip-to-Content Links
 **Learning:** Adding a "Skip to main content" link is a critical accessibility requirement for keyboard users. To make it robust, it needs to be hidden visually but appear when focused using `transform: translateY(-100%)` instead of magic pixel numbers, and the target container (e.g., `<main>`) must have a matching `id` and `tabindex="-1"` so it can programmatically receive focus across all browsers.
 **Action:** Always include a visually hidden 'Skip to main content' link immediately after the opening `<body>` tag. Set the main content container with an `id` and explicitly `tabindex="-1"`.
+
+## 2026-06-25 - Anchor Tag Modal Triggers Keyboard Accessibility
+**Learning:** When using `<a>` tags with `href="#"` as modal triggers, they inherently only respond to the `Enter` key for keyboard users, whereas standard `<button>` tags respond to both `Enter` and `Space`. Additionally, without explicit ARIA roles, screen readers announce them as links rather than buttons that open dialogs, leading to confusing expectations.
+**Action:** Always add `role="button"` and `aria-haspopup="dialog"` to anchor tags functioning as modal triggers. Furthermore, manually bind a `keydown` listener for the `Space` key that prevents default scrolling (`e.preventDefault()`) and opens the modal to match native button behavior and assistive technology expectations.
