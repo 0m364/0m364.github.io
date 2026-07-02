@@ -1,0 +1,5 @@
+127.0.0.1 - - [02/Jul/2026 11:48:15] "GET /contact.html HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 11:48:15] "GET /styles.css HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 11:48:15] "GET /modal.js HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 11:48:15] "GET /checkout-link-qr-code.png HTTP/1.1" 200 -
+127.0.0.1 - - [02/Jul/2026 11:48:15] "GET /widget.js HTTP/1.1" 200 -
