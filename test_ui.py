@@ -39,6 +39,29 @@ async def run():
         await page.screenshot(path="/home/jules/verification/screenshots/error_state.png")
         await page.wait_for_timeout(1000)
 
+        print("Testing keyboard accessibility for sitrep-btn...")
+        await page.goto('http://127.0.0.1:8000/contact.html', wait_until='domcontentloaded')
+
+        # Focus the button and press spacebar
+        btn = page.locator('#sitrep-btn').first
+        await btn.focus()
+        await btn.press(' ')
+
+        # Verify the modal is open by checking if it is visible
+        modal = page.locator('#sitrep-modal')
+        try:
+            await modal.wait_for(state='visible', timeout=3000)
+            print("✅ Modal opened via spacebar.")
+        except Exception as e:
+            print("❌ Failed to open modal via spacebar.", e)
+
+        # Verify focus is inside the modal
+        focused_element = await page.evaluate('document.activeElement.id')
+        if focused_element == 'sitrep-modal' or await page.evaluate('document.activeElement.classList.contains("sitrep-modal-content")') or focused_element == 'close-sitrep':
+            print("✅ Focus successfully moved into the modal.")
+        else:
+            print(f"❌ Focus did not move properly. Currently focused element ID: {focused_element}")
+
         await context.close()
         await browser.close()
 
